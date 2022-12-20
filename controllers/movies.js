@@ -1,7 +1,7 @@
 const BadRequestError = require('../errors/BadRequestError');
 const ForbiddenError = require('../errors/ForbiddenError');
 const NotFoundError = require('../errors/NotFoundError');
-const Movie = require('../models/user');
+const Movie = require('../models/movie');
 const { OK, CREATED } = require('../utils/constants');
 
 module.exports.getUserMovies = (req, res, next) => {
