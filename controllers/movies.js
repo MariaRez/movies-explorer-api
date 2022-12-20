@@ -1,4 +1,6 @@
 const BadRequestError = require('../errors/BadRequestError');
+const ForbiddenError = require('../errors/ForbiddenError');
+const NotFoundError = require('../errors/NotFoundError');
 const Movie = require('../models/user');
 const { OK, CREATED } = require('../utils/constants');
 
@@ -54,5 +56,16 @@ module.exports.createMovie = (req, res, next) => {
 };
 
 module.exports.deleteMovie = (req, res, next) => {
-// DELETE /movies/_id удаляет сохранённый фильм по id
+  // DELETE /movies/_id удаляет сохранённый фильм по id
+  const { movieId } = req.params;
+  Movie.findByIdAndRemove(movieId)
+    .orFail(new NotFoundError(`Фильм с указанным id '${movieId}' не найден`))
+    .then((movie) => {
+      if (!movie.owner.equals(req.user._id)) {
+        return next(new ForbiddenError('Нет прав!'));
+      }
+      return movie.remove()
+        .then(() => res.status(OK).send({ message: 'Фильм успешно удален из сохраненных' }));
+    })
+    .catch(next);
 };
