@@ -1,9 +1,11 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const User = require('../models/user');
+
 const BadRequestError = require('../errors/BadRequestError');
 const ConflictError = require('../errors/ConflictError');
 const NotFoundError = require('../errors/NotFoundError');
-const User = require('../models/user');
+
 const {
   OK,
   SALT,
@@ -12,6 +14,13 @@ const {
 } = require('../utils/constants');
 
 const { JWT_SECRET = 'dev-key' } = process.env;
+
+module.exports.getInfoAboutUser = (req, res, next) => {
+  // GET /users/me возвращает информацию о пользователе (email и имя)
+  User.findById(req.user._id)
+    .then((user) => res.status(OK).send({ data: user }))
+    .catch(next);
+};
 
 module.exports.createUser = (req, res, next) => {
   // POST /signup создаёт пользователя с переданными в теле email, password и name
@@ -50,13 +59,6 @@ module.exports.login = (req, res, next) => {
       );
       res.status(OK).send({ token });
     })
-    .catch(next);
-};
-
-module.exports.getInfoAboutUser = (req, res, next) => {
-  // GET /users/me возвращает информацию о пользователе (email и имя)
-  User.findById(req.user._id)
-    .then((user) => res.status(OK).send({ data: user }))
     .catch(next);
 };
 

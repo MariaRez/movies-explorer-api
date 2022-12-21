@@ -4,6 +4,12 @@ const bcrypt = require('bcryptjs');
 const UnauthorizedError = require('../errors/UnauthorizedError');
 
 const userSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    minlength: 2,
+    maxlength: 30,
+  },
   email: { // уникальное значение
     type: String,
     required: true,
@@ -17,12 +23,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     select: false, // Так по умолчанию хеш пароля пользователя не будет возвращаться из базы
-  },
-  name: {
-    type: String,
-    required: true,
-    minlength: 2,
-    maxlength: 30,
   },
 });
 

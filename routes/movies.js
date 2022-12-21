@@ -8,21 +8,21 @@ router.post('/', celebrate({ // POST /movies создаёт фильм с пер
   body: Joi.object().keys({
     country: Joi.string().required(),
     director: Joi.string().required(),
-    duration: Joi.string().required(),
-    year: Joi.number().required(),
+    duration: Joi.number().required(),
+    year: Joi.string().required(),
     description: Joi.string().required(),
     image: Joi.string().required(),
     trailerLink: Joi.string().required(),
     thumbnail: Joi.string().required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
-    movieId: Joi.string().required(),
+    movieId: Joi.number().required(),
   }),
 }), createMovie);
 
 router.delete('/:movieId', celebrate({ // DELETE /movies/_id удаляет сохранённый фильм по id
   params: Joi.object().keys({
-    movieId: Joi.string().hex().length(24),
+    movieId: Joi.string().hex().length(24).hex(),
   }),
 }), deleteMovie);
 
