@@ -18,6 +18,8 @@ const options = { // для cors настройки
     'https://localhost:3000',
     'http://localhost:3001',
     'https://localhost:3001',
+    'http://api.mariarez.students.nomoredomains.club',
+    'https://api.mariarez.students.nomoredomains.club',
   ],
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
   preflightContinue: false,
