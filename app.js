@@ -1,6 +1,5 @@
 const express = require('express');
 const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -10,6 +9,7 @@ const { login, createUser } = require('./controllers/users');
 const { auth } = require('./middlewares/auth');
 const handlerErrors = require('./middlewares/handlerErrors');
 const NotFoundError = require('./errors/NotFoundError');
+const { limiter } = require('./middlewares/rateLimiter');
 
 const options = { // для cors настройки
   origin: [
@@ -29,13 +29,6 @@ const { PORT = 3000 } = process.env;
 const app = express();
 
 app.use(helmet());
-
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-  standardHeaders: true,
-  legacyHeaders: false,
-});
 
 app.use(limiter);
 
