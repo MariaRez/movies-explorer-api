@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { imageValidateMessage, trailerLinkValidateMessage, thumbnailValidateMessage } = require('../utils/constants');
 
 const movieSchema = new mongoose.Schema({
   country: { // страна создания фильма
@@ -28,7 +29,7 @@ const movieSchema = new mongoose.Schema({
       validator(v) {
         return /http[s]?:\/\/(?:www\.)?([\w-]+\.)+\/?\S*$/.test(v);
       },
-      message: 'Постер к фильму не проходит условия валидации. Проверьте формат!',
+      message: imageValidateMessage,
     },
   },
   trailerLink: { //  ссылка на трейлер фильма
@@ -38,7 +39,7 @@ const movieSchema = new mongoose.Schema({
       validator(v) {
         return /http[s]?:\/\/(?:www\.)?([\w-]+\.)+\/?\S*$/.test(v);
       },
-      message: 'Ссылка на трейлер не проходит условия валидации. Проверьте формат!',
+      message: trailerLinkValidateMessage,
     },
   },
   thumbnail: { //  миниатюрное изображение постера к фильму
@@ -48,7 +49,7 @@ const movieSchema = new mongoose.Schema({
       validator(v) {
         return /http[s]?:\/\/(?:www\.)?([\w-]+\.)+\/?\S*$/.test(v);
       },
-      message: 'Миниатюрное изображение постера к фильму не проходит условия валидации. Проверьте формат!',
+      message: thumbnailValidateMessage,
     },
   },
   owner: { // _id пользователя, который сохранил фильм. Обязательное поле

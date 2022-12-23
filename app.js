@@ -4,13 +4,12 @@ const helmet = require('helmet');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const { errors, celebrate, Joi } = require('celebrate');
+const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const { login, createUser } = require('./controllers/users');
-const { auth } = require('./middlewares/auth');
 const handlerErrors = require('./middlewares/handlerErrors');
-const NotFoundError = require('./errors/NotFoundError');
 const { limiter } = require('./middlewares/rateLimiter');
+const router = require('./routes');
+const { serverCrashMessage } = require('./utils/constants');
 
 const options = { // для cors настройки
   origin: [
@@ -47,32 +46,11 @@ app.use('*', cors(options));
 
 app.get('/crash-test', () => {
   setTimeout(() => {
-    throw new Error('Сервер сейчас упадёт');
+    throw new Error(serverCrashMessage);
   }, 0);
 });
 
-// роуты, которым авторизация нужна
-app.use('/users', auth, require('./routes/users'));
-app.use('/movies', auth, require('./routes/movies'));
-
-app.post('/signin', celebrate({ // POST /signin проверяет переданные в теле почту и пароль и возвращает JWT
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
-  }),
-}), login);
-
-app.post('/signup', celebrate({ // POST /signup создаёт пользователя с переданными в теле email, password и name
-  body: Joi.object().keys({
-    name: Joi.string().required().min(2).max(30),
-    email: Joi.string().required().email(),
-    password: Joi.string().required(),
-  }),
-}), createUser);
-
-app.use(auth, (req, res, next) => {
-  next(new NotFoundError('Page Not found 404'));
-});
+app.use(router);
 
 app.use(errorLogger); // подключаем логгер ошибок
 
