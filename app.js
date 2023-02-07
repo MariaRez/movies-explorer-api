@@ -19,6 +19,8 @@ const options = { // для cors настройки
     'https://localhost:3001',
     'http://api.mariarez.students.nomoredomains.club',
     'https://api.mariarez.students.nomoredomains.club',
+    'http://mariarez.students.nomoredomainsclub.ru',
+    'https://mariarez.students.nomoredomainsclub.ru',
   ],
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
   preflightContinue: false,
@@ -27,7 +29,7 @@ const options = { // для cors настройки
   credentials: true,
 };
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3001 } = process.env;
 const app = express();
 
 app.use(helmet());
